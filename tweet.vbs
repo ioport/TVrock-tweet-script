@@ -1,4 +1,4 @@
-Option Explicit
+ï»¿Option Explicit
 'On Error Resume Next
 Dim arg ,fso ,regEx ,WshShell ,oExec ,msg ,i ,j ,tempFile ,tempLine ,matchLog ,TimeAdj1 ,TimeAdj1s ,TimeAdj2 ,TimeAdj2s ,DiskFree ,strChHashTag ,strRecState ,strTweet
 Dim twtcnslPath ,intMaxRetry ,intRetryTime ,intSleepTime ,MatchStrict ,strRepFile1 ,strRepFile2 ,HashTag ,intDiskFree ,addChTag ,strChList ,strTagList
@@ -9,100 +9,100 @@ Set WshShell = WScript.CreateObject("WScript.Shell")
 
 
 
-'----------İ’è€–Ú------------------------------------------------------------
-'TweetConsole‚Ìƒtƒ‹ƒpƒXi¦•K{j
+'----------è¨­å®šé …ç›®------------------------------------------------------------
+'TweetConsoleã®ãƒ•ãƒ«ãƒ‘ã‚¹ï¼ˆâ€»å¿…é ˆï¼‰
 twtcnslPath = "C:\TvRock\TweetConsole\twtcnsl.exe"
 
-'Twitter“ŠeƒGƒ‰[‚ÌƒŠƒgƒ‰ƒCãŒÀ‰ñ”i“Še‚Í2•ªã‚Åƒ^ƒCƒ€ƒAƒEƒg‚·‚é‚æ‚¤‚Å‚·j
-intMaxRetry = 3 '‰Šúİ’èF3
+'TwitteræŠ•ç¨¿ã‚¨ãƒ©ãƒ¼æ™‚ã®ãƒªãƒˆãƒ©ã‚¤ä¸Šé™å›æ•°ï¼ˆæŠ•ç¨¿ã¯2åˆ†å¼±ã§ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹ã‚ˆã†ã§ã™ï¼‰
+intMaxRetry = 3 'åˆæœŸè¨­å®šï¼š3
 
-'Twitter“ŠeƒGƒ‰[‚ÌƒŠƒgƒ‰ƒCŠÔŠuiƒ~ƒŠ•bj
-intRetryTime = 30000 '‰Šúİ’èF30000i30•bj
+'TwitteræŠ•ç¨¿ã‚¨ãƒ©ãƒ¼æ™‚ã®ãƒªãƒˆãƒ©ã‚¤é–“éš”ï¼ˆãƒŸãƒªç§’ï¼‰
+intRetryTime = 30000 'åˆæœŸè¨­å®šï¼š30000ï¼ˆ30ç§’ï¼‰
 
-'˜^‰æŠJnEI—¹‚ÉƒƒOƒtƒ@ƒCƒ‹‚ğŠJ‚­‚Ü‚Å‚Ì‘Ò‹@ŠÔiƒ~ƒŠ•bj
-intSleepTime = 3500 '‰Šúİ’èF3500i3.5•bj
+'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†æ™‚ã«ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã¾ã§ã®å¾…æ©Ÿæ™‚é–“ï¼ˆãƒŸãƒªç§’ï¼‰
+intSleepTime = 3500 'åˆæœŸè¨­å®šï¼š3500ï¼ˆ3.5ç§’ï¼‰
 
-'˜^‰æŠJnEI—¹‚ÌƒƒOŒŸõ‚Å—\–ñƒ^ƒCƒgƒ‹–¼‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡i0‚Å‘±sA1‚ÅI—¹j
-MatchStrict = 0 '‰Šúİ’èF0iu˜A‘±‚µ‚½—\–ñ‚Í˜^‰æ‚ğI—¹‚µ‚È‚¢vê‡‚Ì•s‹ï‡‘Îôj
+'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†æ™‚ã®ãƒ­ã‚°æ¤œç´¢ã§äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆï¼ˆ0ã§ç¶šè¡Œã€1ã§çµ‚äº†ï¼‰
+MatchStrict = 0 'åˆæœŸè¨­å®šï¼š0ï¼ˆã€Œé€£ç¶šã—ãŸäºˆç´„ã¯éŒ²ç”»ã‚’çµ‚äº†ã—ãªã„ã€å ´åˆã®ä¸å…·åˆå¯¾ç­–ï¼‰
 
-'˜^‰æŠJnEI—¹‚Åƒtƒ@ƒCƒ‹–¼—˜—p‚·‚éê‡‚Ì’uŠ·ğŒ1i“–‚Ä‚Í‚Ü‚ç‚È‚¯‚ê‚ÎğŒ2‚Öj
-strRepFile1 = "(.+?)_\d{6}.*" 'ƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚Ìu_”NŒ“úcv‚ğæ‚èœ‚­
-'strRepFile1 = "(.+?)_" & arg(4) & ".*" 'ƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚Ìu_•ú‘—‹Ç–¼cv‚ğæ‚èœ‚­
-'strRepFile1 = "\d{12}_(.+?) _.+?$" 'SCRenameu@YY@MM@DD@SH@SM_@TT _@CHv‚©‚çƒ^ƒCƒgƒ‹ˆÈŠO‚ğæ‚èœ‚­
+'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†ã§ãƒ•ã‚¡ã‚¤ãƒ«ååˆ©ç”¨ã™ã‚‹å ´åˆã®ç½®æ›æ¡ä»¶1ï¼ˆå½“ã¦ã¯ã¾ã‚‰ãªã‘ã‚Œã°æ¡ä»¶2ã¸ï¼‰
+strRepFile1 = "(.+?)_\d{6}.*" 'ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ«å°¾ã®ã€Œ_å¹´æœˆæ—¥â€¦ã€ã‚’å–ã‚Šé™¤ã
+'strRepFile1 = "(.+?)_" & arg(4) & ".*" 'ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ«å°¾ã®ã€Œ_æ”¾é€å±€åâ€¦ã€ã‚’å–ã‚Šé™¤ã
+'strRepFile1 = "\d{12}_(.+?) _.+?$" 'SCRenameã€Œ@YY@MM@DD@SH@SM_@TT _@CHã€ã‹ã‚‰ã‚¿ã‚¤ãƒˆãƒ«ä»¥å¤–ã‚’å–ã‚Šé™¤ã
 
-'˜^‰æŠJnEI—¹‚Åƒtƒ@ƒCƒ‹–¼—˜—p‚·‚éê‡‚Ì’uŠ·ğŒ2i“–‚Ä‚Í‚Ü‚ç‚È‚¯‚ê‚Îƒtƒ@ƒCƒ‹–¼‚ğ‚»‚Ì‚Ü‚Üg—pj
-'strRepFile1 = "(.+?)_\d{6}.*" 'ƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚Ìu_”NŒ“úcv‚ğæ‚èœ‚­
-'strRepFile2 = "(.+?)_" & arg(4) & ".*" 'ƒtƒ@ƒCƒ‹–¼‚Ì––”ö‚Ìu_•ú‘—‹Ç–¼cv‚ğæ‚èœ‚­
-strRepFile2 = "\d{12}_(.+?) _.+?$" 'SCRenameu@YY@MM@DD@SH@SM_@TT _@CHv‚©‚çƒ^ƒCƒgƒ‹ˆÈŠO‚ğæ‚èœ‚­
+'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†ã§ãƒ•ã‚¡ã‚¤ãƒ«ååˆ©ç”¨ã™ã‚‹å ´åˆã®ç½®æ›æ¡ä»¶2ï¼ˆå½“ã¦ã¯ã¾ã‚‰ãªã‘ã‚Œã°ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ãã®ã¾ã¾ä½¿ç”¨ï¼‰
+'strRepFile1 = "(.+?)_\d{6}.*" 'ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ«å°¾ã®ã€Œ_å¹´æœˆæ—¥â€¦ã€ã‚’å–ã‚Šé™¤ã
+'strRepFile2 = "(.+?)_" & arg(4) & ".*" 'ãƒ•ã‚¡ã‚¤ãƒ«åã®æœ«å°¾ã®ã€Œ_æ”¾é€å±€åâ€¦ã€ã‚’å–ã‚Šé™¤ã
+strRepFile2 = "\d{12}_(.+?) _.+?$" 'SCRenameã€Œ@YY@MM@DD@SH@SM_@TT _@CHã€ã‹ã‚‰ã‚¿ã‚¤ãƒˆãƒ«ä»¥å¤–ã‚’å–ã‚Šé™¤ã
 
-'TvRock‚ÌƒnƒbƒVƒ…ƒ^ƒO‚Ì•\‹Li0‚Åƒ^ƒO‚È‚µA1‚Åu’Êíƒ^ƒOv‚Ì‚İA2‚Åu’Z‚¢ƒ^ƒO ’Êíƒ^ƒOvj
-HashTag = 2 '‰Šúİ’èF2
+'TvRockã®ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°ã®è¡¨è¨˜ï¼ˆ0ã§ã‚¿ã‚°ãªã—ã€1ã§ã€Œé€šå¸¸ã‚¿ã‚°ã€ã®ã¿ã€2ã§ã€ŒçŸ­ã„ã‚¿ã‚° é€šå¸¸ã‚¿ã‚°ã€ï¼‰
+HashTag = 2 'åˆæœŸè¨­å®šï¼š2
 
-'‹ó‚«—e—Ê‚ªw’è%–¢–‚Å––”ö‚Éu¦‹ó‚«—e—Ê›%v‚Ì’Ç‰Ái0‚Å’Ç‰Á‚µ‚È‚¢j2TB‚¾‚Æ5%‚Å–ñ100GB
-intDiskFree = 5 '‰Šúİ’èF5
+'ç©ºãå®¹é‡ãŒæŒ‡å®š%æœªæº€ã§æœ«å°¾ã«ã€Œâ€»ç©ºãå®¹é‡â—‹%ã€ã®è¿½åŠ ï¼ˆ0ã§è¿½åŠ ã—ãªã„ï¼‰2TBã ã¨5%ã§ç´„100GB
+intDiskFree = 5 'åˆæœŸè¨­å®šï¼š5
 
-'‹’®’†‚Ìƒ`ƒƒƒ“ƒlƒ‹ƒnƒbƒVƒ…ƒ^ƒO‚ğ’Ç‰Ái0‚Å•t‰Á‚µ‚È‚¢A1‚Å•t‰Á‚·‚éj
-addChTag = 0 '‰Šúİ’èF0
+'è¦–è´ä¸­ã®ãƒãƒ£ãƒ³ãƒãƒ«ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°ã‚’è¿½åŠ ï¼ˆ0ã§ä»˜åŠ ã—ãªã„ã€1ã§ä»˜åŠ ã™ã‚‹ï¼‰
+addChTag = 0 'åˆæœŸè¨­å®šï¼š0
 
-'ƒ`ƒƒƒ“ƒlƒ‹ƒnƒbƒVƒ…ƒ^ƒO’uŠ·—p‚Ì•ú‘—‹Ç–¼iTvRock‚Åİ’è‚µ‚Ä‚ ‚é•ú‘—‹Ç–¼‚É‚µ‚Ä‚­‚¾‚³‚¢j
-strChList = Array("‚m‚g‚j‘‡","‚m‚g‚j‹³ˆç","“ú–{ƒeƒŒƒr","ƒeƒŒƒr’©“ú","‚s‚a‚rƒeƒŒƒr","ƒeƒŒƒr“Œ‹","ƒtƒWƒeƒŒƒr","‚l‚wƒeƒŒƒr", _
-                  "‚m‚g‚j‰q¯‘æˆê","‚m‚g‚j@‚a‚r‚P","‚m‚g‚jƒnƒCƒrƒWƒ‡ƒ“","‚m‚g‚j@‚a‚rƒvƒŒƒ~ƒAƒ€","‚a‚r“úƒeƒŒ","‚a‚r’©“ú","‚a‚r|‚s‚a‚r","‚a‚rƒWƒƒƒpƒ“","‚a‚rƒtƒW","‚a‚r‚P‚P")
-'ƒ`ƒƒƒ“ƒlƒ‹ƒnƒbƒVƒ…ƒ^ƒOi•ú‘—‹Ç–¼‚Æ‡”Ô‚ğ‡‚í‚¹‚Ä‚­‚¾‚³‚¢j
+'ãƒãƒ£ãƒ³ãƒãƒ«ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°ç½®æ›ç”¨ã®æ”¾é€å±€åï¼ˆTvRockã§è¨­å®šã—ã¦ã‚ã‚‹æ”¾é€å±€åã«ã—ã¦ãã ã•ã„ï¼‰
+strChList = Array("ï¼®ï¼¨ï¼«ç·åˆ","ï¼®ï¼¨ï¼«æ•™è‚²","æ—¥æœ¬ãƒ†ãƒ¬ãƒ“","ãƒ†ãƒ¬ãƒ“æœæ—¥","ï¼´ï¼¢ï¼³ãƒ†ãƒ¬ãƒ“","ãƒ†ãƒ¬ãƒ“æ±äº¬","ãƒ•ã‚¸ãƒ†ãƒ¬ãƒ“","ï¼­ï¼¸ãƒ†ãƒ¬ãƒ“", _
+                  "ï¼®ï¼¨ï¼«è¡›æ˜Ÿç¬¬ä¸€","ï¼®ï¼¨ï¼«ã€€ï¼¢ï¼³ï¼‘","ï¼®ï¼¨ï¼«ãƒã‚¤ãƒ“ã‚¸ãƒ§ãƒ³","ï¼®ï¼¨ï¼«ã€€ï¼¢ï¼³ãƒ—ãƒ¬ãƒŸã‚¢ãƒ ","ï¼¢ï¼³æ—¥ãƒ†ãƒ¬","ï¼¢ï¼³æœæ—¥","ï¼¢ï¼³ï¼ï¼´ï¼¢ï¼³","ï¼¢ï¼³ã‚¸ãƒ£ãƒ‘ãƒ³","ï¼¢ï¼³ãƒ•ã‚¸","ï¼¢ï¼³ï¼‘ï¼‘")
+'ãƒãƒ£ãƒ³ãƒãƒ«ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°ï¼ˆæ”¾é€å±€åã¨é †ç•ªã‚’åˆã‚ã›ã¦ãã ã•ã„ï¼‰
 strTagList = Array("nhk","etv","ntv","tvasahi","tbs","tvtokyo","fujitv","mxtv", _
                    "bs1","bs1","nhkbsp","nhkbsp","bsntv","bsasahi","bstbs","bsj","bsfuji","bs11")
 '------------------------------------------------------------------------------
 
 
 
-'ˆ—U‚è•ª‚¯
+'å‡¦ç†æŒ¯ã‚Šåˆ†ã‘
 Select Case Len(arg(0))
 	Case 2
-		RecLog '˜^‰æŠJnEI—¹
+		RecLog 'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†
 	Case 3
-		Watching '‹’®’†
+		Watching 'è¦–è´ä¸­
 	Case 4
-		RecSet '˜^‰æ—\–ñ‚ÆŠÔ’²®
+		RecSet 'éŒ²ç”»äºˆç´„ã¨æ™‚é–“èª¿æ•´
 End Select
 Set arg = Nothing
 Set tempFile = Nothing
 
 
 
-'˜^‰æ—\–ñ‚ÆŠÔ’²®@ˆø”‚Ì—áF"˜^‰æ—\–ñ" "11/25" "21:00" "22:00" "twrb12345678" "•ú‘—‹Ç–¼" "—\–ñƒ^ƒCƒgƒ‹–¼"
+'éŒ²ç”»äºˆç´„ã¨æ™‚é–“èª¿æ•´ã€€å¼•æ•°ã®ä¾‹ï¼š"éŒ²ç”»äºˆç´„" "11/25" "21:00" "22:00" "twrb12345678" "æ”¾é€å±€å" "äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«å"
 Sub RecSet()
 strTweet = arg(0) & " ["
 Select Case Len(arg(1))
-	Case 4,5 '•W€
-		strTweet = strTweet & Replace(arg(1),"/0","/") & " " & arg(2) & "`" & arg(3)
-	Case 7,8 '28ŠÔ•\¦
+	Case 4,5 'æ¨™æº–
+		strTweet = strTweet & Replace(arg(1),"/0","/") & " " & arg(2) & "ï½" & arg(3)
+	Case 7,8 '28æ™‚é–“è¡¨ç¤º
 		If DateDiff("h","0:00",arg(2)) < 4 Then
 			If DateDiff("h",arg(2),arg(3)) < 0 Then
-				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & " " & Left(arg(2),1)+24 & Right(arg(2),3) & "`" & Left(arg(3),1)+48 & Right(arg(3),3)
+				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & " " & Left(arg(2),1)+24 & Right(arg(2),3) & "ï½" & Left(arg(3),1)+48 & Right(arg(3),3)
 			Else
-				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & " " & Left(arg(2),1)+24 & Right(arg(2),3) & "`" & Left(arg(3),1)+24 & Right(arg(3),3)
+				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & " " & Left(arg(2),1)+24 & Right(arg(2),3) & "ï½" & Left(arg(3),1)+24 & Right(arg(3),3)
 			End If
 		ElseIf DateDiff("h",arg(2),arg(3)) < 0 Then
-			strTweet = strTweet & Replace(Mid(arg(1),4),"/0","/") & " " & arg(2) & "`" & Left(arg(3),1)+24 & Right(arg(3),3)
+			strTweet = strTweet & Replace(Mid(arg(1),4),"/0","/") & " " & arg(2) & "ï½" & Left(arg(3),1)+24 & Right(arg(3),3)
 		Else
-			strTweet = strTweet & Replace(Mid(arg(1),4),"/0","/") & " " & arg(2) & "`" & arg(3)
+			strTweet = strTweet & Replace(Mid(arg(1),4),"/0","/") & " " & arg(2) & "ï½" & arg(3)
 		End If
-	Case 9,10 '—j“ú•\¦
-		strTweet = strTweet & Replace(Mid(arg(1),6),"/0","/") & "(" & WeekdayName(Weekday(DateValue(arg(1))),True) & ") " & arg(2) & "`" & arg(3)
-	Case 12,13 '—j“úE28ŠÔ•\¦
+	Case 9,10 'æ›œæ—¥è¡¨ç¤º
+		strTweet = strTweet & Replace(Mid(arg(1),6),"/0","/") & "(" & WeekdayName(Weekday(DateValue(arg(1))),True) & ") " & arg(2) & "ï½" & arg(3)
+	Case 12,13 'æ›œæ—¥ãƒ»28æ™‚é–“è¡¨ç¤º
 		If DateDiff("h","0:00",arg(2)) < 4 Then
 			If DateDiff("h",arg(2),arg(3)) < 0 Then
-				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & "(" & WeekdayName(Weekday(DateAdd("d",-1,DateValue(Mid(arg(1),4)))),True) & ") " & Left(arg(2),1)+24 & Right(arg(2),3) & "`" & Left(arg(3),1)+48 & Right(arg(3),3)
+				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & "(" & WeekdayName(Weekday(DateAdd("d",-1,DateValue(Mid(arg(1),4)))),True) & ") " & Left(arg(2),1)+24 & Right(arg(2),3) & "ï½" & Left(arg(3),1)+48 & Right(arg(3),3)
 			Else
-				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & "(" & WeekdayName(Weekday(DateAdd("d",-1,DateValue(Mid(arg(1),4)))),True) & ") " & Left(arg(2),1)+24 & Right(arg(2),3) & "`" & Left(arg(3),1)+24 & Right(arg(3),3)
+				strTweet = strTweet & Mid(Replace(DateAdd("d",-1,DateValue(Mid(arg(1),4))),"/0","/"),6) & "(" & WeekdayName(Weekday(DateAdd("d",-1,DateValue(Mid(arg(1),4)))),True) & ") " & Left(arg(2),1)+24 & Right(arg(2),3) & "ï½" & Left(arg(3),1)+24 & Right(arg(3),3)
 			End If
 		ElseIf DateDiff("h",arg(2),arg(3)) < 0 Then
-			strTweet = strTweet & Replace(Mid(arg(1),9),"/0","/") & "(" & WeekdayName(Weekday(DateValue(Mid(arg(1),4))),True) & ") " & arg(2) & "`" & Left(arg(3),1)+24 & Right(arg(3),3)
+			strTweet = strTweet & Replace(Mid(arg(1),9),"/0","/") & "(" & WeekdayName(Weekday(DateValue(Mid(arg(1),4))),True) & ") " & arg(2) & "ï½" & Left(arg(3),1)+24 & Right(arg(3),3)
 		Else
-			strTweet = strTweet & Replace(Mid(arg(1),9),"/0","/") & "(" & WeekdayName(Weekday(DateValue(Mid(arg(1),4))),True) & ") " & arg(2) & "`" & arg(3)
+			strTweet = strTweet & Replace(Mid(arg(1),9),"/0","/") & "(" & WeekdayName(Weekday(DateValue(Mid(arg(1),4))),True) & ") " & arg(2) & "ï½" & arg(3)
 		End If
 End Select
 
-If arg.Count > 7 Then '—\–ñƒ^ƒCƒgƒ‹–¼‚Éƒ_ƒuƒ‹ƒNƒI[ƒe[ƒVƒ‡ƒ“‚ª‚ ‚éê‡‚Ìˆ—
+If arg.Count > 7 Then 'äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åã«ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚‹å ´åˆã®å‡¦ç†
 	For i=6 To arg.Count-1
 		matchLog = matchLog & " " & arg(i)
 	Next
@@ -112,20 +112,20 @@ End If
 
 strTweet = strTweet & "]" & matchLog & " [" & arg(5) & ":"
 
-If StrComp(arg(0),"ŠÔ’²®") = 0 Then
-	WScript.Sleep 10000 '”O‚Ì‚½‚ßtvrock.log‚ÌXV‚ğ‘Ò‚Â(10•b)
-	regEx.Pattern = "\[.+?\]:”Ô‘gu(.+?)v‚Ì(.+?)ŠÔ‚ğ(.+?)•ª(\d+?)•b’²®‚µ‚Ü‚µ‚½"
-	Set tempFile = fso.OpenTextFile("tvrock.log") '‚±‚ÌVBSƒtƒ@ƒCƒ‹‚ğTvRockİ’è‚Ìì‹ÆƒtƒHƒ‹ƒ_ˆÈŠO‚É’u‚¢‚½ê‡‚ÍŠe©‚ÌŠÂ‹«‚É‡‚í‚¹‚Ä‰º‚³‚¢
+If StrComp(arg(0),"æ™‚é–“èª¿æ•´") = 0 Then
+	WScript.Sleep 10000 'å¿µã®ãŸã‚tvrock.logã®æ›´æ–°ã‚’å¾…ã¤(10ç§’)
+	regEx.Pattern = "\[.+?\]:ç•ªçµ„ã€Œ(.+?)ã€ã®(.+?)æ™‚é–“ã‚’(.+?)åˆ†(\d+?)ç§’èª¿æ•´ã—ã¾ã—ãŸ"
+	Set tempFile = fso.OpenTextFile("tvrock.log") 'ã“ã®VBSãƒ•ã‚¡ã‚¤ãƒ«ã‚’TvRockè¨­å®šã®ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ä»¥å¤–ã«ç½®ã„ãŸå ´åˆã¯å„è‡ªã®ç’°å¢ƒã«åˆã‚ã›ã¦ä¸‹ã•ã„
 	Do Until tempFile.AtEndOfStream
 		tempLine = tempFile.ReadLine
 		If regEx.Test(tempLine) Then
-			If DateDiff("s",Mid(tempLine,2,17),Now) < 40 Then 'ƒƒO‚ÌŠÔ’²®î•ñ‚ªÀs‚©‚ç40•b–¢–‚Ìê‡
+			If DateDiff("s",Mid(tempLine,2,17),Now) < 40 Then 'ãƒ­ã‚°ã®æ™‚é–“èª¿æ•´æƒ…å ±ãŒå®Ÿè¡Œæ™‚ã‹ã‚‰40ç§’æœªæº€ã®å ´åˆ
 				If StrComp(regEx.Replace(tempLine,"$1"),arg(6)) = 0 Then
-					If StrComp(regEx.Replace(tempLine,"$2"),"ŠJn") = 0 Then
+					If StrComp(regEx.Replace(tempLine,"$2"),"é–‹å§‹") = 0 Then
 						TimeAdj1 = regEx.Replace(tempLine,"$3")
 						TimeAdj1s = regEx.Replace(tempLine,"$4")
 					End If
-					If StrComp(regEx.Replace(tempLine,"$2"),"I—¹") = 0 Then
+					If StrComp(regEx.Replace(tempLine,"$2"),"çµ‚äº†") = 0 Then
 						TimeAdj2 = regEx.Replace(tempLine,"$3")
 						TimeAdj2s = regEx.Replace(tempLine,"$4")
 					End If
@@ -135,17 +135,17 @@ If StrComp(arg(0),"ŠÔ’²®") = 0 Then
 	Loop
 	tempFile.Close
 	
-	If TimeAdj1 >= 0 Then i = "ŠJn+"
-	If TimeAdj1 <  0 Then i = "ŠJn-"
-	If TimeAdj2 >= 0 Then j = "I—¹+"
-	If TimeAdj2 <  0 Then j = "I—¹-"
+	If TimeAdj1 >= 0 Then i = "é–‹å§‹+"
+	If TimeAdj1 <  0 Then i = "é–‹å§‹-"
+	If TimeAdj2 >= 0 Then j = "çµ‚äº†+"
+	If TimeAdj2 <  0 Then j = "çµ‚äº†-"
 	Select Case StrComp(TimeAdj1s,"00")
 		Case -1
 			TimeAdj1s = ""
 		Case 0
 			TimeAdj1s = ","
 		Case Else
-			TimeAdj1s = TimeAdj1s & "•b,"
+			TimeAdj1s = TimeAdj1s & "ç§’,"
 	End Select
 	Select Case StrComp(TimeAdj2s,"00")
 		Case -1
@@ -153,17 +153,17 @@ If StrComp(arg(0),"ŠÔ’²®") = 0 Then
 		Case 0
 			TimeAdj2s = ","
 		Case Else
-			TimeAdj2s = TimeAdj2s & "•b,"
+			TimeAdj2s = TimeAdj2s & "ç§’,"
 	End Select
 	If IsEmpty(TimeAdj1) = False Then
 		TimeAdj1 = Abs(TimeAdj1)
 		If TimeAdj1 > 1440 Then
-			TimeAdj1 = i & Fix(TimeAdj1/1440) & "“ú" & Fix((TimeAdj1-Fix(TimeAdj1/1440)*1440)/60) & "ŠÔ" & (TimeAdj1-Fix(TimeAdj1/1440)*1440)-Fix((TimeAdj1-Fix(TimeAdj1/1440)*1440)/60)*60 & "•ª"
-'			TimeAdj1 = i & Fix(TimeAdj1/1440) & "“ú " & Left(TimeSerial(0,TimeAdj1-Fix(TimeAdj1/1440)*1440,0),5)
+			TimeAdj1 = i & Fix(TimeAdj1/1440) & "æ—¥" & Fix((TimeAdj1-Fix(TimeAdj1/1440)*1440)/60) & "æ™‚é–“" & (TimeAdj1-Fix(TimeAdj1/1440)*1440)-Fix((TimeAdj1-Fix(TimeAdj1/1440)*1440)/60)*60 & "åˆ†"
+'			TimeAdj1 = i & Fix(TimeAdj1/1440) & "æ—¥ " & Left(TimeSerial(0,TimeAdj1-Fix(TimeAdj1/1440)*1440,0),5)
 		ElseIf TimeAdj1 > 60 Then
-			TimeAdj1 = i & Fix(TimeAdj1/60) & "ŠÔ" & TimeAdj1-Fix(TimeAdj1/60)*60 & "•ª"
+			TimeAdj1 = i & Fix(TimeAdj1/60) & "æ™‚é–“" & TimeAdj1-Fix(TimeAdj1/60)*60 & "åˆ†"
 		ElseIf TimeAdj1 > 0 Then
-			TimeAdj1 = i & TimeAdj1 & "•ª"
+			TimeAdj1 = i & TimeAdj1 & "åˆ†"
 '			TimeAdj1 = i & Left(TimeSerial(0,TimeAdj1,0),5)
 		ElseIf TimeAdj1 = 0 Then
 			TimeAdj1 = i
@@ -172,12 +172,12 @@ If StrComp(arg(0),"ŠÔ’²®") = 0 Then
 	If IsEmpty(TimeAdj2) = False Then
 		TimeAdj2 = Abs(TimeAdj2)
 		If TimeAdj2 > 1440 Then
-			TimeAdj2 = j & Fix(TimeAdj2/1440) & "“ú" & Fix((TimeAdj2-Fix(TimeAdj2/1440)*1440)/60) & "ŠÔ" & (TimeAdj2-Fix(TimeAdj2/1440)*1440)-Fix((TimeAdj2-Fix(TimeAdj2/1440)*1440)/60)*60 & "•ª"
-'			TimeAdj2 = j & Fix(TimeAdj2/1440) & "“ú " & Left(TimeSerial(0,TimeAdj2-Fix(TimeAdj2/1440)*1440,0),5)
+			TimeAdj2 = j & Fix(TimeAdj2/1440) & "æ—¥" & Fix((TimeAdj2-Fix(TimeAdj2/1440)*1440)/60) & "æ™‚é–“" & (TimeAdj2-Fix(TimeAdj2/1440)*1440)-Fix((TimeAdj2-Fix(TimeAdj2/1440)*1440)/60)*60 & "åˆ†"
+'			TimeAdj2 = j & Fix(TimeAdj2/1440) & "æ—¥ " & Left(TimeSerial(0,TimeAdj2-Fix(TimeAdj2/1440)*1440,0),5)
 		ElseIf TimeAdj2 > 60 Then
-			TimeAdj2 = j & Fix(TimeAdj2/60) & "ŠÔ" & TimeAdj2-Fix(TimeAdj2/60)*60 & "•ª"
+			TimeAdj2 = j & Fix(TimeAdj2/60) & "æ™‚é–“" & TimeAdj2-Fix(TimeAdj2/60)*60 & "åˆ†"
 		ElseIf TimeAdj2 > 0 Then
-			TimeAdj2 = j & TimeAdj2 & "•ª"
+			TimeAdj2 = j & TimeAdj2 & "åˆ†"
 '			TimeAdj2 = j & Left(TimeSerial(0,TimeAdj2,0),5)
 		ElseIf TimeAdj2 = 0 Then
 			TimeAdj2 = j
@@ -185,12 +185,12 @@ If StrComp(arg(0),"ŠÔ’²®") = 0 Then
 	End If
 	strTweet = strTweet & TimeAdj1 & TimeAdj1s & TimeAdj2 & TimeAdj2s
 Else
-	Set tempFile = fso.OpenTextFile("tvrock.log2") '‚±‚ÌVBSƒtƒ@ƒCƒ‹‚ğTvRockİ’è‚Ìì‹ÆƒtƒHƒ‹ƒ_ˆÈŠO‚É’u‚¢‚½ê‡‚ÍŠe©‚ÌŠÂ‹«‚É‡‚í‚¹‚Ä‰º‚³‚¢
+	Set tempFile = fso.OpenTextFile("tvrock.log2") 'ã“ã®VBSãƒ•ã‚¡ã‚¤ãƒ«ã‚’TvRockè¨­å®šã®ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ä»¥å¤–ã«ç½®ã„ãŸå ´åˆã¯å„è‡ªã®ç’°å¢ƒã«åˆã‚ã›ã¦ä¸‹ã•ã„
 	tempLine = tempFile.ReadLine
 	tempFile.Close
 End If
 
-If Len(arg(4)) > 0 Then 'TvRock‚ÌƒnƒbƒVƒ…ƒ^ƒO
+If Len(arg(4)) > 0 Then 'TvRockã®ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°
 	Select Case HashTag
 		Case 0
 			HashTag = ""
@@ -210,21 +210,21 @@ End Sub
 
 
 
-'‹’®’†@ˆø”‚Ì—áF"‹’®’†" "twrb12345678" "•ú‘—‹Ç–¼" "ƒWƒƒƒ“ƒ‹–¼" "ƒ^ƒCƒgƒ‹–¼"
+'è¦–è´ä¸­ã€€å¼•æ•°ã®ä¾‹ï¼š"è¦–è´ä¸­" "twrb12345678" "æ”¾é€å±€å" "ã‚¸ãƒ£ãƒ³ãƒ«å" "ã‚¿ã‚¤ãƒˆãƒ«å"
 Sub Watching()
-'If arg(3) = "ƒjƒ…[ƒX^•ñ“¹" Then Exit Sub '‹’®’†‚ÌƒcƒC[ƒg‚µ‚È‚¢ƒWƒƒƒ“ƒ‹‚Ìê‡As“ª‚Ìu'v‚ğíœ
-'If arg(3) = "ƒXƒ|[ƒc" Then Exit Sub '“¯ã
-'If arg(3) = "ƒhƒ‰ƒ}" Then Exit Sub '“¯ã
-'If arg(3) = "‰¹Šy" Then Exit Sub '“¯ã
-'If arg(3) = "ƒoƒ‰ƒGƒeƒB[" Then Exit Sub '“¯ã
-'If arg(3) = "‰f‰æ" Then Exit Sub '“¯ã
-'If arg(3) = "ƒAƒjƒ^“ÁB" Then Exit Sub '“¯ã
-'If arg(3) = "î•ñ^ƒƒCƒhƒVƒ‡[" Then Exit Sub '“¯ã
-'If arg(3) = "ƒhƒLƒ…ƒƒ“ƒ^ƒŠ[^‹³—{ " Then Exit Sub '“¯ã
-'If arg(3) = "Œ€ê^Œö‰‰" Then Exit Sub '“¯ã
-'If arg(3) = "ï–¡^‹³ˆç" Then Exit Sub '“¯ã
+'If arg(3) = "ãƒ‹ãƒ¥ãƒ¼ã‚¹ï¼å ±é“" Then Exit Sub 'è¦–è´ä¸­ã®ãƒ„ã‚¤ãƒ¼ãƒˆã—ãªã„ã‚¸ãƒ£ãƒ³ãƒ«ã®å ´åˆã€è¡Œé ­ã®ã€Œ'ã€ã‚’å‰Šé™¤
+'If arg(3) = "ã‚¹ãƒãƒ¼ãƒ„" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "ãƒ‰ãƒ©ãƒ" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "éŸ³æ¥½" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "ãƒãƒ©ã‚¨ãƒ†ã‚£ãƒ¼" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "æ˜ ç”»" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "ã‚¢ãƒ‹ãƒ¡ï¼ç‰¹æ’®" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "æƒ…å ±ï¼ãƒ¯ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ã‚¿ãƒªãƒ¼ï¼æ•™é¤Š " Then Exit Sub 'åŒä¸Š
+'If arg(3) = "åŠ‡å ´ï¼å…¬æ¼”" Then Exit Sub 'åŒä¸Š
+'If arg(3) = "è¶£å‘³ï¼æ•™è‚²" Then Exit Sub 'åŒä¸Š
 
-If arg.Count > 5 Then 'ƒ^ƒCƒgƒ‹–¼‚Éƒ_ƒuƒ‹ƒNƒI[ƒe[ƒVƒ‡ƒ“‚ª‚ ‚éê‡‚Ìˆ—
+If arg.Count > 5 Then 'ã‚¿ã‚¤ãƒˆãƒ«åã«ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚‹å ´åˆã®å‡¦ç†
 	For i=4 To arg.Count-1
 		matchLog = matchLog & " " & arg(i)
 	Next
@@ -232,7 +232,7 @@ Else
 	matchLog = " " & arg(4)
 End If
 
-If Len(arg(1)) > 0 Then 'TvRock‚ÌƒnƒbƒVƒ…ƒ^ƒO
+If Len(arg(1)) > 0 Then 'TvRockã®ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°
 	Select Case HashTag
 		Case 0
 			HashTag = ""
@@ -251,7 +251,7 @@ strTweet = arg(0) & matchLog & HashTag & strChHashTag
 TweetPost
 End Sub
 
-Sub ChTag() '•ú‘—‹Ç–¼ƒnƒbƒVƒ…ƒ^ƒO
+Sub ChTag() 'æ”¾é€å±€åãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°
 For i = LBound(strChList) To UBound(strChList)
 	If InStr(arg(2),strChList(i)) <> 0 Then Exit For
 Next
@@ -260,38 +260,38 @@ End Sub
 
 
 
-'˜^‰æŠJnEI—¹@ˆø”‚Ì—á(—\–ñƒ^ƒCƒgƒ‹–¼‚Ü‚Å‚Í•K{)F "I—¹" "T2" "twrb12345678" "—\–ñƒ^ƒCƒgƒ‹–¼" "•ú‘—‹Ç–¼" "ƒtƒ@ƒCƒ‹–¼" "ƒWƒƒƒ“ƒ‹–¼"
+'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†ã€€å¼•æ•°ã®ä¾‹(äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åã¾ã§ã¯å¿…é ˆ)ï¼š "çµ‚äº†" "T2" "twrb12345678" "äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«å" "æ”¾é€å±€å" "ãƒ•ã‚¡ã‚¤ãƒ«å" "ã‚¸ãƒ£ãƒ³ãƒ«å"
 Sub RecLog()
-If arg.Count > 6 Then 'w’èƒWƒƒƒ“ƒ‹‚Å‚ÍƒcƒC[ƒg‚µ‚È‚¢ê‡‚Ìˆ—
-'	If arg(arg.Count-1) = "ƒjƒ…[ƒX^•ñ“¹" Then Exit Sub '˜^‰æŠJnEI—¹‚ÌƒcƒC[ƒg‚µ‚È‚¢ƒWƒƒƒ“ƒ‹‚Ìê‡As“ª‚Ìu'v‚ğíœ
-'	If arg(arg.Count-1) = "ƒXƒ|[ƒc" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "ƒhƒ‰ƒ}" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "‰¹Šy" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "ƒoƒ‰ƒGƒeƒB[" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "‰f‰æ" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "ƒAƒjƒ^“ÁB" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "î•ñ^ƒƒCƒhƒVƒ‡[" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "ƒhƒLƒ…ƒƒ“ƒ^ƒŠ[^‹³—{ " Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "Œ€ê^Œö‰‰" Then Exit Sub '“¯ã
-'	If arg(arg.Count-1) = "ï–¡^‹³ˆç" Then Exit Sub '“¯ã
+If arg.Count > 6 Then 'æŒ‡å®šã‚¸ãƒ£ãƒ³ãƒ«ã§ã¯ãƒ„ã‚¤ãƒ¼ãƒˆã—ãªã„å ´åˆã®å‡¦ç†
+'	If arg(arg.Count-1) = "ãƒ‹ãƒ¥ãƒ¼ã‚¹ï¼å ±é“" Then Exit Sub 'éŒ²ç”»é–‹å§‹ãƒ»çµ‚äº†ã®ãƒ„ã‚¤ãƒ¼ãƒˆã—ãªã„ã‚¸ãƒ£ãƒ³ãƒ«ã®å ´åˆã€è¡Œé ­ã®ã€Œ'ã€ã‚’å‰Šé™¤
+'	If arg(arg.Count-1) = "ã‚¹ãƒãƒ¼ãƒ„" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "ãƒ‰ãƒ©ãƒ" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "éŸ³æ¥½" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "ãƒãƒ©ã‚¨ãƒ†ã‚£ãƒ¼" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "æ˜ ç”»" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "ã‚¢ãƒ‹ãƒ¡ï¼ç‰¹æ’®" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "æƒ…å ±ï¼ãƒ¯ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ã‚¿ãƒªãƒ¼ï¼æ•™é¤Š " Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "åŠ‡å ´ï¼å…¬æ¼”" Then Exit Sub 'åŒä¸Š
+'	If arg(arg.Count-1) = "è¶£å‘³ï¼æ•™è‚²" Then Exit Sub 'åŒä¸Š
 End If
 
 For i = 0 To 1
-	WScript.Sleep intSleepTime '”O‚Ì‚½‚ßtvrock.log‚ÌXV‚ğ‘Ò‚Â
-	regEx.Pattern = "\[" & arg(1) & "\]”Ô‘gu.+?v ˜^‰æ" & arg(0)
-	Set tempFile = fso.OpenTextFile("tvrock.log") '‚±‚ÌVBSƒtƒ@ƒCƒ‹‚ğTvRockİ’è‚Ìì‹ÆƒtƒHƒ‹ƒ_ˆÈŠO‚É’u‚¢‚½ê‡‚ÍŠe©‚ÌŠÂ‹«‚É‡‚í‚¹‚Ä‰º‚³‚¢
+	WScript.Sleep intSleepTime 'å¿µã®ãŸã‚tvrock.logã®æ›´æ–°ã‚’å¾…ã¤
+	regEx.Pattern = "\[" & arg(1) & "\]ç•ªçµ„ã€Œ.+?ã€ éŒ²ç”»" & arg(0)
+	Set tempFile = fso.OpenTextFile("tvrock.log") 'ã“ã®VBSãƒ•ã‚¡ã‚¤ãƒ«ã‚’TvRockè¨­å®šã®ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ä»¥å¤–ã«ç½®ã„ãŸå ´åˆã¯å„è‡ªã®ç’°å¢ƒã«åˆã‚ã›ã¦ä¸‹ã•ã„
 	Do Until tempFile.AtEndOfStream
 		tempLine = tempFile.ReadLine
 		If regEx.Test(tempLine) Then matchLog = tempLine
 	Loop
 	tempFile.Close
-	regEx.Pattern = "^.*:\d\d (.+?)\]:\[.+?\]”Ô‘gu(.+?)v (.+?) Card=.+?Sig=(.+?), Bitrate=(.+?)Mbps, Drop=(.+?), Scrambling.+? BcTimeDiff=(.+?)sec, TimeAdj=(.+?)sec, CPU.+?DiskFree=(.+?)%\."
+	regEx.Pattern = "^.*:\d\d (.+?)\]:\[.+?\]ç•ªçµ„ã€Œ(.+?)ã€ (.+?) Card=.+?Sig=(.+?), Bitrate=(.+?)Mbps, Drop=(.+?), Scrambling.+? BcTimeDiff=(.+?)sec, TimeAdj=(.+?)sec, CPU.+?DiskFree=(.+?)%\."
 	If StrComp(regEx.Replace(matchLog,"$2"),arg(3)) = 0 Then Exit For
 Next
 
-If DateDiff("s",Mid(matchLog,2,17),Now) > 20 Then Exit Sub 'ƒƒO‚Ì˜^‰æî•ñ‚ªÀs‚©‚ç20•b‚ğ’´‚¦‚Ä‚¢‚éê‡‚Éˆ—‚ğI—¹
+If DateDiff("s",Mid(matchLog,2,17),Now) > 20 Then Exit Sub 'ãƒ­ã‚°ã®éŒ²ç”»æƒ…å ±ãŒå®Ÿè¡Œæ™‚ã‹ã‚‰20ç§’ã‚’è¶…ãˆã¦ã„ã‚‹å ´åˆã«å‡¦ç†ã‚’çµ‚äº†
 
-If Len(arg(2)) > 0 Then 'TvRock‚ÌƒnƒbƒVƒ…ƒ^ƒO
+If Len(arg(2)) > 0 Then 'TvRockã®ãƒãƒƒã‚·ãƒ¥ã‚¿ã‚°
 	Select Case HashTag
 		Case 0
 			HashTag = ""
@@ -304,15 +304,15 @@ Else
 	HashTag = ""
 End If
 
-If CSng(regEx.Replace(matchLog,"$9")) < intDiskFree Then DiskFree = " ¦‹ó‚«—e—Ê" & regEx.Replace(matchLog,"$9") & "%" '‹ó‚«—e—Ê‚ªw’è%–¢–‚Ìê‡‚ÉƒƒbƒZ[ƒW‚ğ––”ö‚Ö’Ç‰Á
+If CSng(regEx.Replace(matchLog,"$9")) < intDiskFree Then DiskFree = " â€»ç©ºãå®¹é‡" & regEx.Replace(matchLog,"$9") & "%" 'ç©ºãå®¹é‡ãŒæŒ‡å®š%æœªæº€ã®å ´åˆã«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æœ«å°¾ã¸è¿½åŠ 
 
 If StrComp(regEx.Replace(matchLog,"$2"),arg(3)) <> 0 Then
-	If InStr(regEx.Replace(matchLog,"$2"),"""") <> 0 Then '—\–ñƒ^ƒCƒgƒ‹–¼‚Éƒ_ƒuƒ‹ƒNƒI[ƒe[ƒVƒ‡ƒ“‚ª‚ ‚éê‡‚Ìˆ—
+	If InStr(regEx.Replace(matchLog,"$2"),"""") <> 0 Then 'äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åã«ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚‹å ´åˆã®å‡¦ç†
 		strTweet = regEx.Replace(matchLog,"$3 $2 [Sg$4,Br$5,Dr$6,Td$7,Ta$8,TvRock V$1" & HashTag & "]" & DiskFree)
 		TweetPost
 		Exit Sub
 	End If
-	If MatchStrict = 1 Then WScript.Quit(224) 'ƒƒOŒŸõ‚Å—\–ñƒ^ƒCƒgƒ‹–¼‚ªŒ©‚Â‚©‚ç‚È‚¯‚ê‚ÎI—¹‚·‚éê‡AˆÙíI—¹ƒR[ƒh(0xe0)‚ğ•Ô‚µ‚ÄI—¹
+	If MatchStrict = 1 Then WScript.Quit(224) 'ãƒ­ã‚°æ¤œç´¢ã§äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åãŒè¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°çµ‚äº†ã™ã‚‹å ´åˆã€ç•°å¸¸çµ‚äº†ã‚³ãƒ¼ãƒ‰(0xe0)ã‚’è¿”ã—ã¦çµ‚äº†
 	strTweet = regEx.Replace(matchLog,"$3 $2 [Sg$4,Br$5,Dr$6,Td$7,Ta$8,TvRock V$1" & HashTag & "]" & DiskFree)
 	TweetPost
 	Exit Sub
@@ -321,20 +321,20 @@ End If
 strRecState = regEx.Replace(matchLog,"Sg$4,Br$5,Dr$6,Td$7,Ta$8,TvRock V$1" & HashTag & "]" & DiskFree)
 Select Case arg.Count
 	Case 4
-		strTweet = regEx.Replace(matchLog,"$3 $2 [") & strRecState 'Ver 0.9t8€‹’‚Ì•\‹L
+		strTweet = regEx.Replace(matchLog,"$3 $2 [") & strRecState 'Ver 0.9t8æº–æ‹ ã®è¡¨è¨˜
 	Case 5
-		strTweet = regEx.Replace(matchLog,"$3 $2 [") & arg(4) & ":" & strRecState '•ú‘—‹Ç–¼’Ç‰Á
+		strTweet = regEx.Replace(matchLog,"$3 $2 [") & arg(4) & ":" & strRecState 'æ”¾é€å±€åè¿½åŠ 
 	Case Else
-		strTweet = regEx.Replace(matchLog,"$3 ") '—\–ñƒ^ƒCƒgƒ‹–¼‚Ì‘ã‚í‚è‚Éƒtƒ@ƒCƒ‹–¼‚ğg‚¤
-		regEx.Pattern = strRepFile1 'ƒtƒ@ƒCƒ‹–¼’uŠ·ğŒ1
+		strTweet = regEx.Replace(matchLog,"$3 ") 'äºˆç´„ã‚¿ã‚¤ãƒˆãƒ«åã®ä»£ã‚ã‚Šã«ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ä½¿ã†
+		regEx.Pattern = strRepFile1 'ãƒ•ã‚¡ã‚¤ãƒ«åç½®æ›æ¡ä»¶1
 		If regEx.Test(arg(5)) Then
 			strTweet = strTweet & regEx.Replace(arg(5),"$1") & " [" & arg(4) & ":" & strRecState
 		Else
-			regEx.Pattern = strRepFile2 'ƒtƒ@ƒCƒ‹–¼’uŠ·ğŒ2
+			regEx.Pattern = strRepFile2 'ãƒ•ã‚¡ã‚¤ãƒ«åç½®æ›æ¡ä»¶2
 			If regEx.Test(arg(5)) Then
 				strTweet = strTweet & regEx.Replace(arg(5),"$1") & " [" & arg(4) & ":" & strRecState
 			Else
-				strTweet = strTweet & arg(5) & " [" & arg(4) & ":" & strRecState 'ã‹L‚Ì’uŠ·ğŒ‚É“–‚Ä‚Í‚Ü‚ç‚È‚¢ê‡ƒtƒ@ƒCƒ‹–¼‚ğ‚»‚Ì‚Ü‚Üg‚¤
+				strTweet = strTweet & arg(5) & " [" & arg(4) & ":" & strRecState 'ä¸Šè¨˜ã®ç½®æ›æ¡ä»¶ã«å½“ã¦ã¯ã¾ã‚‰ãªã„å ´åˆãƒ•ã‚¡ã‚¤ãƒ«åã‚’ãã®ã¾ã¾ä½¿ã†
 			End If
 		End If
 End Select
@@ -343,33 +343,33 @@ End Sub
 
 
 
-'ƒcƒC[ƒg‚ğ“Še
+'ãƒ„ã‚¤ãƒ¼ãƒˆã‚’æŠ•ç¨¿
 Sub TweetPost()
-strTweet = Replace(strTweet,"‘E„","‘úg„") 'TvRock‚Å•¶š‰»‚¯‚·‚é•¶š—ñ‚ğ’uŠ·
-strTweet = Replace(strTweet,"E“c‰„•F","ûü“c‰„•F")
-strTweet = Replace(strTweet,"E‹´‘å•ã","ûü‹´‘å•ã")
-strTweet = Replace(strTweet,"E‹´^—œq","ûü‹´^—œq")
-strTweet = Replace(strTweet,"E‰i‰p–¾","úº‰i‰p–¾")
-strTweet = Replace(strTweet,"‹{E‚ ‚¨‚¢","‹{ú±‚ ‚¨‚¢")
-regEx.Pattern = "˜^‰æ(—\–ñ|ŠJn|I—¹)(.+?)ƒCƒJ–º(.+?)"
-strTweet = regEx.Replace(strTweet,"˜^‰æ$1‚ÅƒQƒ\I$2ƒCƒJ–º$3")
+strTweet = Replace(strTweet,"è‰ãƒ»å‰›","è‰å½…å‰›") 'TvRockã§æ–‡å­—åŒ–ã‘ã™ã‚‹æ–‡å­—åˆ—ã‚’ç½®æ›
+strTweet = Replace(strTweet,"ãƒ»ç”°å»¶å½¦","é«™ç”°å»¶å½¦")
+strTweet = Replace(strTweet,"ãƒ»æ©‹å¤§è¼”","é«™æ©‹å¤§è¼”")
+strTweet = Replace(strTweet,"ãƒ»æ©‹çœŸæ¢¨å­","é«™æ©‹çœŸæ¢¨å­")
+strTweet = Replace(strTweet,"ãƒ»æ°¸è‹±æ˜","å¾·æ°¸è‹±æ˜")
+strTweet = Replace(strTweet,"å®®ãƒ»ã‚ãŠã„","å®®ï¨‘ã‚ãŠã„")
+regEx.Pattern = "éŒ²ç”»(äºˆç´„|é–‹å§‹|çµ‚äº†)(.+?)ã‚¤ã‚«å¨˜(.+?)"
+strTweet = regEx.Replace(strTweet,"éŒ²ç”»$1ã§ã‚²ã‚½ï¼$2ã‚¤ã‚«å¨˜$3")
 regEx.Pattern = "(.+?)\[(.+?)(:|,)TvRock.*?\]$"
-If Len(regEx.Replace(strTweet,"$1\[$2")) <= 140 Then 'u,TvRockvˆÈ‰º‚ğœ‚¢‚½‚ç140•¶šˆÈ“à‚È‚ç––”ö‚Ìu,TvRockvˆÈ‰º‚ğíœ‚µ‚Ä“Še
-	For j=1 To intMaxRetry '“Še‚ÌƒŠƒgƒ‰ƒC‰ñ”
+If Len(regEx.Replace(strTweet,"$1\[$2")) <= 140 Then 'ã€Œ,TvRockã€ä»¥ä¸‹ã‚’é™¤ã„ãŸã‚‰140æ–‡å­—ä»¥å†…ãªã‚‰æœ«å°¾ã®ã€Œ,TvRockã€ä»¥ä¸‹ã‚’å‰Šé™¤ã—ã¦æŠ•ç¨¿
+	For j=1 To intMaxRetry 'æŠ•ç¨¿ã®ãƒªãƒˆãƒ©ã‚¤å›æ•°
 		Set oExec = WshShell.Exec("""" & twtcnslPath & """ /t """ & Left(strTweet,140))
 		msg = oExec.StdOut.ReadAll
-		If InStr(msg,"‚Â‚Ô‚â‚«‚Ü‚µ‚½") <> 0 Then Exit For
-		If j=intMaxRetry Then WScript.Quit(225) 'ƒŠƒgƒ‰ƒC‰ñ”‚ğ’´‚¦‚½‚çˆÙíI—¹ƒR[ƒh(0xe1)‚ğ•Ô‚µ‚ÄI—¹
-		WScript.Sleep intRetryTime '“Še‚Å‚«‚È‚©‚Á‚½ê‡ƒŠƒgƒ‰ƒC‚Ü‚Å‘Ò‹@
+		If InStr(msg,"ã¤ã¶ã‚„ãã¾ã—ãŸ") <> 0 Then Exit For
+		If j=intMaxRetry Then WScript.Quit(225) 'ãƒªãƒˆãƒ©ã‚¤å›æ•°ã‚’è¶…ãˆãŸã‚‰ç•°å¸¸çµ‚äº†ã‚³ãƒ¼ãƒ‰(0xe1)ã‚’è¿”ã—ã¦çµ‚äº†
+		WScript.Sleep intRetryTime 'æŠ•ç¨¿ã§ããªã‹ã£ãŸå ´åˆãƒªãƒˆãƒ©ã‚¤ã¾ã§å¾…æ©Ÿ
 	Next
 Else
-	For i=0 To Int(Len(strTweet)/134+0.9)-1 'ã‹L‚Å140•¶š‚ğ’´‚¦‚é‚È‚çæ“ª‚É•ªŠ„”‚ğ’Ç‰Á‚µ‚Ä•ªŠ„“Še
-		For j=1 To intMaxRetry '“Še‚ÌƒŠƒgƒ‰ƒC‰ñ”
+	For i=0 To Int(Len(strTweet)/134+0.9)-1 'ä¸Šè¨˜ã§140æ–‡å­—ã‚’è¶…ãˆã‚‹ãªã‚‰å…ˆé ­ã«åˆ†å‰²æ•°ã‚’è¿½åŠ ã—ã¦åˆ†å‰²æŠ•ç¨¿
+		For j=1 To intMaxRetry 'æŠ•ç¨¿ã®ãƒªãƒˆãƒ©ã‚¤å›æ•°
 			Set oExec = WshShell.Exec("""" & twtcnslPath & """ /t (""" & i+1 & "/" & Int(Len(strTweet)/134+0.9) & ") " & Mid(strTweet,1+134*i,134))
 			msg = i & oExec.StdOut.ReadAll
-			If InStr(msg,i & "‚Â‚Ô‚â‚«‚Ü‚µ‚½") <> 0 Then Exit For
-			If j=intMaxRetry Then WScript.Quit(225+i) 'ƒŠƒgƒ‰ƒC‰ñ”‚ğ’´‚¦‚½‚çˆÙíI—¹ƒR[ƒh(0xe1)ˆÈ~‚ğ•Ô‚µ‚ÄI—¹
-			WScript.Sleep intRetryTime '“Še‚Å‚«‚È‚©‚Á‚½ê‡ƒŠƒgƒ‰ƒC‚Ü‚Å‘Ò‹@
+			If InStr(msg,i & "ã¤ã¶ã‚„ãã¾ã—ãŸ") <> 0 Then Exit For
+			If j=intMaxRetry Then WScript.Quit(225+i) 'ãƒªãƒˆãƒ©ã‚¤å›æ•°ã‚’è¶…ãˆãŸã‚‰ç•°å¸¸çµ‚äº†ã‚³ãƒ¼ãƒ‰(0xe1)ä»¥é™ã‚’è¿”ã—ã¦çµ‚äº†
+			WScript.Sleep intRetryTime 'æŠ•ç¨¿ã§ããªã‹ã£ãŸå ´åˆãƒªãƒˆãƒ©ã‚¤ã¾ã§å¾…æ©Ÿ
 		Next
 	Next
 End If

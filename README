@@ -1,138 +1,138 @@
-[�T�v]
-�uHD�\��^��}�l�[�W�� TvRock�v http://1st.geocities.jp/tvrock_web/ ��
-Ver 0.9u��Twitter�@�\���폜���ꂽ�̂ŁA���̑���ɒǉ����ꂽ�R�}���h��
-�g�p���ď]���̂悤�ȃc�C�[�g������̂ł��B
+﻿[概要]
+「HD予約録画マネージャ TvRock」 http://1st.geocities.jp/tvrock_web/ の
+Ver 0.9uでTwitter機能が削除されたので、その代わりに追加されたコマンドを
+使用して従来のようなツイートするものです。
 
 
-[����m�F��]
+[動作確認環境]
 Windows 7 x64
 TvRock Ver 0.9u2
 TweetConsole ver0.7.3
 
 
-[�C���X�g�[�����@]
-1. TweetConsole�ihttp://www.vector.co.jp/soft/win95/net/se483315.html�j��
-   �C���X�g�[��
-2. TvRock�́u�ݒ�v-�u�v���Z�X�v�ɂ���e�L�X�g�{�b�N�X�ɓ�����command.txt
-   �̒�����K�v�ȕ����R�s�y�B
-3. ������tweet.vbs��TvRock�́u�ݒ�v-�u�V�X�e���ݒ�v�Ŏw�肵��TvRock���
-   �t�H���_�ɃR�s�[�B
-4. tweet.vbs�̑O���ɂ���ݒ荀�ڂ�TweetConsole�̃p�X���e���̊��ɍ��킹��
-   �uC:\TvRock\TweetConsole\twtcnsl.exe�v����ύX����B
+[インストール方法]
+1. TweetConsole（http://www.vector.co.jp/soft/win95/net/se483315.html）を
+   インストール
+2. TvRockの「設定」-「プロセス」にあるテキストボックスに同梱のcommand.txt
+   の中から必要な物をコピペ。
+3. 同梱のtweet.vbsをTvRockの「設定」-「システム設定」で指定したTvRock作業
+   フォルダにコピー。
+4. tweet.vbsの前半にある設定項目のTweetConsoleのパスを各自の環境に合わせて
+   「C:\TvRock\TweetConsole\twtcnsl.exe」から変更する。
 
 
-[�A���C���X�g�[�����@]
-�C���X�g�[�������t�@�C�����폜���Ă��������B
+[アンインストール方法]
+インストールしたファイルを削除してください。
 
 
-[�c�C�[�g�̃J�X�^�}�C�Y]
-���菇2��command.txt�̓t���I�v�V�����Ȃ̂ŕK�v�Ȃ������͍s������1�����Ԃ�
-�O���Ă��������B�^��J�n�E�I���́u"%5"�v����悪�I�v�V�����ł��B
+[ツイートのカスタマイズ]
+※手順2のcommand.txtはフルオプションなので必要ない引数は行末から1つずつ順番に
+外してください。録画開始・終了の「"%5"」から先がオプションです。
 
-<����>
-�E�c�C�[�g���Ȃ��W������������ꍇ
-tweet.vbs�̊Y���s�̐擪�ɂ���u'�v���폜���Ă��������B�����Ƙ^��Ōʂɐݒ�B
+<共通>
+・ツイートしないジャンルがある場合
+tweet.vbsの該当行の先頭にある「'」を削除してください。視聴と録画で個別に設定。
 
-<�^��J�n�E�I��>
-�E�u�A�������\��͘^����~���Ȃ��v��ݒ肵�ĂȂ��ꍇ�i�ύX���Ȃ��Ă������j
-tweet.vbs�̑O���ɂ���ݒ荀�ڂ́uMatchStrict = 0�v��0����1�ɁB
-�i���O�ɔԑg����������Ȃ����TvRock�̃��O�Ɉُ�I���R�[�h(0xe0)���L�^�j
+<録画開始・終了>
+・「連続した予約は録画を停止しない」を設定してない場合（変更しなくてもいい）
+tweet.vbsの前半にある設定項目の「MatchStrict = 0」を0から1に。
+（ログに番組名が見つからなければTvRockのログに異常終了コード(0xe0)が記録）
 
-�EVer 0.9t8�����̕\�L�̃c�C�[�g�ɂ���ꍇ
-�菇2�̃R�}���h�̂����^��J�n�ƏI�����ȉ��̂悤�ɏC���B
-CS:cscript tweet.vbs �J�n %h "%g" "%8"
-CE:cscript tweet.vbs �I�� %h "%g" "%8"
+・Ver 0.9t8準拠の表記のツイートにする場合
+手順2のコマンドのうち録画開始と終了を以下のように修正。
+CS:cscript tweet.vbs 開始 %h "%g" "%8"
+CE:cscript tweet.vbs 終了 %h "%g" "%8"
 
-�E�����ǖ���ǉ�����ꍇ
-�菇2�̃R�}���h�̂����^��J�n�ƏI�����ȉ��̂悤�ɏC���B
-CS:cscript tweet.vbs �J�n %h "%g" "%8" "%5"
-CE:cscript tweet.vbs �I�� %h "%g" "%8" "%5"
-�����ǖ��u"%5"�v�̕\���ꏊ��ύX����������tweet.vbs��ҏW�B
+・放送局名を追加する場合
+手順2のコマンドのうち録画開始と終了を以下のように修正。
+CS:cscript tweet.vbs 開始 %h "%g" "%8" "%5"
+CE:cscript tweet.vbs 終了 %h "%g" "%8" "%5"
+放送局名「"%5"」の表示場所を変更したい時はtweet.vbsを編集。
 
-�E�c�C�[�g�̔ԑg�����t�@�C��������g�������ꍇ
-�菇2�̃R�}���h�̏C���͓��ɕK�v�Ȃ��ł��B�s���́u%c�v�͍폜���č\���܂��񂪁A
-�����ǖ��i"%5"�j�͕K�{�ł��B
-tweet.vbs�̑O���ɂ���ݒ荀�ڂ́ustrRepFile1�v�ƁustrRepFile2�v�ɒu��������
-���K�\���Œ�`���Ă��������B
-�����ݒ�ł̓t�@�C�����̖����Ɂu_�N�����c�v�ƂȂ��Ă���΂������菜���A
-SCRename�́u@YY@MM@DD@SH@SM_@TT _@CH�v�ƂȂ��Ă���΃^�C�g���ȊO����菜���A
-����ȊO�̏ꍇ�̓t�@�C���������̂܂܎g���悤�ɂȂ��Ă��܂��B
+・ツイートの番組名をファイル名から使いたい場合
+手順2のコマンドの修正は特に必要ないです。行末の「%c」は削除して構いませんが、
+放送局名（"%5"）は必須です。
+tweet.vbsの前半にある設定項目の「strRepFile1」と「strRepFile2」に置換条件を
+正規表現で定義してください。
+初期設定ではファイル名の末尾に「_年月日…」となっていればそれを取り除き、
+SCRenameの「@YY@MM@DD@SH@SM_@TT _@CH」となっていればタイトル以外を取り除き、
+それ以外の場合はファイル名をそのまま使うようになっています。
 
-<�\��E���Ԓ���>
-�E�j�����\������ꍇ
-�菇2�̃R�}���h�̂����^��\��⎞�Ԓ������ȉ��̂悤�ɏC���B
-CR:cscript tweet.vbs �^��\�� %i/%j %k %l "%g" "%5" "%d"
-TJ:cscript tweet.vbs ���Ԓ��� %i/%j %k %l "%g" "%5" "%d"
+<予約・時間調整>
+・曜日も表示する場合
+手順2のコマンドのうち録画予約や時間調整を以下のように修正。
+CR:cscript tweet.vbs 録画予約 %i/%j %k %l "%g" "%5" "%d"
+TJ:cscript tweet.vbs 時間調整 %i/%j %k %l "%g" "%5" "%d"
 
-�E28���ԕ\���ɂ���ꍇ
-�菇2�̃R�}���h�̂����^��\��⎞�Ԓ������ȉ��̂悤�ɏC���B
-CR:cscript tweet.vbs �^��\�� 28h%j %k %l "%g" "%5" "%d"
-TJ:cscript tweet.vbs ���Ԓ��� 28h%j %k %l "%g" "%5" "%d"
+・28時間表示にする場合
+手順2のコマンドのうち録画予約や時間調整を以下のように修正。
+CR:cscript tweet.vbs 録画予約 28h%j %k %l "%g" "%5" "%d"
+TJ:cscript tweet.vbs 時間調整 28h%j %k %l "%g" "%5" "%d"
 
-�E�j����28���ԕ\������ꍇ
-�菇2�̃R�}���h�̂����^��\��⎞�Ԓ������ȉ��̂悤�ɏC���B
-CR:cscript tweet.vbs �^��\�� 28h%i/%j %k %l "%g" "%5" "%d"
-TJ:cscript tweet.vbs ���Ԓ��� 28h%i/%j %k %l "%g" "%5" "%d"
+・曜日と28時間表示する場合
+手順2のコマンドのうち録画予約や時間調整を以下のように修正。
+CR:cscript tweet.vbs 録画予約 28h%i/%j %k %l "%g" "%5" "%d"
+TJ:cscript tweet.vbs 時間調整 28h%i/%j %k %l "%g" "%5" "%d"
 
-<������>
-�E�����ǖ��n�b�V���^�O��ǉ�
-tweet.vbs�̑O���ɂ���ݒ荀�ڂ́uaddChTag = 0�v��0����1�ɁB
-�T���v���œ����̋ǂ����Ă��܂��B�ǂ̕ύX��tweet.vbs�̑O���ɂ���ݒ荀�ڂ��C���B
+<視聴中>
+・放送局名ハッシュタグを追加
+tweet.vbsの前半にある設定項目の「addChTag = 0」を0から1に。
+サンプルで東京の局を入れています。局の変更はtweet.vbsの前半にある設定項目を修正。
 
 
-[����]
+[履歴]
 2011/04/09
-�E���e�G���[�̏ꍇTvRock�̃��O�Ɉُ�I���R�[�h(0xe1)���L�^����悤�ɂ���
-�E���Ԓ����ŊJ�n�ƏI���������ύX���ꂽ���ǉ�
-�Etweet.vbs�Őݒ�ł����ȍ��ڂ�1�J���ɂ܂Ƃ߂�
-�E�n�b�V���^�O�A�����ǖ�����̕\�L�𒲐��i�R�}���h��%g���u"�v�ň͂�ł��������j
-�E���̑��ׂ����C��
+・投稿エラーの場合TvRockのログに異常終了コード(0xe1)を記録するようにした
+・時間調整で開始と終了が何分変更されたか追加
+・tweet.vbsで設定できる主な項目を1カ所にまとめた
+・ハッシュタグ、放送局名周りの表記を調整（コマンドの%gも「"」で囲んでください）
+・その他細かい修正
 
-2011/03/01�@http://www1.axfc.net/uploader/File/so/59218.zip
-�ETwitter���d�����œ��e�ł��Ȃ��ꍇ�Ƀ��g���C�i�����ݒ��3��j����悤�ɂ���
-�@(WSH 5.6�iWindows XP�j���O�̏ꍇ��WSH���A�b�v�f�[�g���Ă�������)
-�E�^��J�n�Ƙ^��I���ȊO�̔ԑg���Ɂu"�v������ꍇ�ł��c�C�[�g�ł���悤�ɂ���
-�@(�R�}���h��cscript��ǉ����A�\��⎞�Ԓ����Ǝ������̈����̏��Ԃ�ύX�����̂�
-�@ ������command.txt���Q�Ƃ��Ă�������)
-�E140���𒴂���ꍇ�̏������C�����A�u,TvRock�v�ȉ��̕������𒲂ׂ�悤�ɂ���
+2011/03/01　http://www1.axfc.net/uploader/File/so/59218.zip
+・Twitterが重い等で投稿できない場合にリトライ（初期設定は3回）するようにした
+　(WSH 5.6（Windows XP）より前の場合はWSHをアップデートしてください)
+・録画開始と録画終了以外の番組名に「"」がある場合でもツイートできるようにした
+　(コマンドにcscriptを追加し、予約や時間調整と視聴中の引数の順番を変更したので
+　 同梱のcommand.txtを参照してください)
+・140字を超える場合の処理を修正し、「,TvRock」以下の文字数を調べるようにした
 one more thing...
 
-2011/02/17�@http://www1.axfc.net/uploader/File/so/58652.zip
-�E�\��⎞�Ԓ����ŗj����28���ԕ\�������ꂼ��ݒ�\�ɂ���
-�E�^�掞�Ƀf�B�X�N�̋󂫗e�ʂ��s���i�����ݒ�ł�5%�����j���Ă����烁�b�Z�[�W�ǉ�
-�E140���𒴂���ꍇ�A168���܂łȂ璴�ߕ����폜���āA�����葽����Ε������ē��e
+2011/02/17　http://www1.axfc.net/uploader/File/so/58652.zip
+・予約や時間調整で曜日と28時間表示をそれぞれ設定可能にした
+・録画時にディスクの空き容量が不足（初期設定では5%未満）していたらメッセージ追加
+・140字を超える場合、168字までなら超過部分削除して、それより多ければ分割して投稿
 
-2011/02/06�@http://www1.axfc.net/uploader/File/so/58135.zip
-�E�^��J�n�Ƙ^��I���̃��O�擾��tvrock.log2����tvrock.log�ɕύX
+2011/02/06　http://www1.axfc.net/uploader/File/so/58135.zip
+・録画開始と録画終了のログ取得をtvrock.log2からtvrock.logに変更
 
 2011/02/05
-�E�^��J�n�Ƙ^��I���̓���������啝�ɕύX
-�@(���O�Ɨ\��^�C�g������v�����^���񂩂�ł��V�����^����ɕύX)
-�E�u�A�������\��͘^����~���Ȃ��v�ݒ�����Ă���ꍇ�A�^��I���̈����ƃ��O��
-�@��v���Ȃ��s��ɉ��Ή�
-�E�ԑg���Ɂu"�v������ꍇ�ł��^��J�n�Ƙ^��I�������̓c�C�[�g�ł���悤�ɂ���
-�E�����Z�O�̘^��J�n�Ƙ^��I���̕\�L��Ver 0.9t8�̂��̂ɍ��킹��
+・録画開始と録画終了の内部処理を大幅に変更
+　(ログと予約タイトルが一致した録画情報から最も新しい録画情報に変更)
+・「連続した予約は録画を停止しない」設定をしている場合、録画終了の引数とログが
+　一致しない不具合に仮対応
+・番組名に「"」がある場合でも録画開始と録画終了だけはツイートできるようにした
+・ワンセグの録画開始と録画終了の表記をVer 0.9t8のものに合わせる
 
-2010/12/05�@http://driftwood.blog3.fc2.com/blog-entry-2404.html
-�E�^��J�n�Ƙ^��I���ňꕔ�̔ԑg�����G���[�ɂȂ�̂ŏ�����ύX
-�E�������̃c�C�[�g���Ή�
-�E�W�������ʂ̃c�C�[�g�ۂ�ݒ肵�₷������
+2010/12/05　http://driftwood.blog3.fc2.com/blog-entry-2404.html
+・録画開始と録画終了で一部の番組名がエラーになるので処理を変更
+・試聴中のツイートも対応
+・ジャンル別のツイート可否を設定しやすくした
 
 2010/11/29
-�E������VBScript�Ɉڍs
+・処理をVBScriptに移行
 
-�r���ȗ�
+途中省略
 
-2010/06/17�@http://driftwood.blog3.fc2.com/blog-entry-2245.html
-�E�R�}���h�v�����v�g��ActivePerl���g�������̂������J
-
-
-[���쌠����іƐӎ���]
-���̃t�@�C���̒��쌠�͕������܂��B���ς��]�ڂ����R�ł��B
-�s��͑Ή������˂܂��̂Ŋe���ŉ������Ă��������B
-���̃t�@�C�����g�p�������Ƃɂ���Đ��������ׂĂ̏�Q�E���Q�E�s�����
-�ւ��ẮA��؂̐ӔC�𕉂��܂���B�e���̐ӔC�ɂ����Ă��g�p���������B
+2010/06/17　http://driftwood.blog3.fc2.com/blog-entry-2245.html
+・コマンドプロンプトとActivePerlを使ったものを初公開
 
 
-[�z�z��]
+[著作権および免責事項]
+このファイルの著作権は放棄します。改変も転載も自由です。
+不具合は対応しかねますので各自で解決してください。
+このファイルを使用したことによって生じたすべての障害・損害・不具合等に
+関しては、一切の責任を負いません。各自の責任においてご使用ください。
+
+
+[配布元]
 http://driftwood.blog3.fc2.com/?tag=TvRock
