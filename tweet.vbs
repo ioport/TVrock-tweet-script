@@ -36,7 +36,7 @@ strRepFile1 = "(.+?)_\d{6}.*" 'ファイル名の末尾の「_年月日…」を
 strRepFile2 = "\d{12}_(.+?) _.+?$" 'SCRename「@YY@MM@DD@SH@SM_@TT _@CH」からタイトル以外を取り除く
 
 'TvRockのハッシュタグの表記（0でタグなし、1で「通常タグ」のみ、2で「短いタグ 通常タグ」）
-HashTag = 2 '初期設定：2
+HashTag = 1 '初期設定：2
 
 '空き容量が指定%未満で末尾に「※空き容量○%」の追加（0で追加しない）2TBだと5%で約100GB
 intDiskFree = 5 '初期設定：5
@@ -68,7 +68,7 @@ Set tempFile = Nothing
 
 
 
-'録画予約と時間調整　引数の例："録画予約" "11/25" "21:00" "22:00" "twrb12345678" "放送局名" "予約タイトル名"
+'録画予約と時間調整　引数の例："録画予約" "11/25" "21:00" "22:00" "twrb12345678" "放送局名" "キーワード検索予約時のタイトルキーワード" "キーワード検索予約時の詳細キーワード" "予約タイトル名"
 Sub RecSet()
 strTweet = arg(0) & " ["
 Select Case Len(arg(1))
@@ -102,12 +102,12 @@ Select Case Len(arg(1))
 		End If
 End Select
 
-If arg.Count > 7 Then '予約タイトル名にダブルクオーテーションがある場合の処理
-	For i=6 To arg.Count-1
+If arg.Count > 9 Then '予約タイトル名にダブルクオーテーションがある場合の処理
+	For i=8 To arg.Count-1
 		matchLog = matchLog & " " & arg(i)
 	Next
 Else
-	matchLog = " " & arg(6)
+	matchLog = " " & arg(8)
 End If
 
 strTweet = strTweet & "]" & matchLog & " [" & arg(5) & ":"
@@ -205,9 +205,15 @@ End If
 
 regEx.Pattern = "^\[\d\d/\d\d/\d\d \d\d:\d\d:\d\d (.+?)\]:.+"
 strTweet = strTweet & regEx.Replace(tempLine,"TvRock V$1") & HashTag & "]"
-TweetPost
-End Sub
 
+If Len(arg(6)) > 1 Then 'キーワード検索予約のキーワードがあれば、詳細で動作を変更
+	If Len(arg(7)) > 1 Then
+		TweetPost
+	End If
+Else
+	TweetPost
+End If
+End Sub
 
 
 '視聴中　引数の例："視聴中" "twrb12345678" "放送局名" "ジャンル名" "タイトル名"
